@@ -8,12 +8,13 @@ public class InvoiceServiceTest {
 	InvoiceGenerator invoiceGenerator = null;
 
 	@Before
-	public void setUp() {
+	public void setUp() throws Exception {
 		invoiceGenerator = new InvoiceGenerator();
 	}
 
 	@Test
 	public void givenDistanceAndTime_ShouldReturnTotalFare() {
+		invoiceGenerator = new InvoiceGenerator();
 		double distance = 2.0;
 		int time = 5;
 		double fare = invoiceGenerator.calculateFare(distance, time);
@@ -22,25 +23,31 @@ public class InvoiceServiceTest {
 
 	@Test
 	public void givenLessDistanceAndTime_ShouldReturnMinFare() {
+		invoiceGenerator = new InvoiceGenerator();
 		double distance = 0.1;
 		int time = 1;
 		double fare = invoiceGenerator.calculateFare(distance, time);
 		Assertions.assertEquals(5, fare, 0.0);
-
-	}
-
-	@Test
-	public void givenMultipleRides_ShouldReturnTotalFare() {
-		Ride[] rides = { new Ride(2.0, 5), new Ride(0.1, 1) };
-		double fare = invoiceGenerator.calculateFare(rides);
-		Assertions.assertEquals(30, fare, 0.0);
 	}
 
 	@Test
 	public void givenMultipleRides_ShouldReturnInvoiceSummary() {
-		Ride[] rides = { new Ride(5.0, 10), new Ride(10, 20) };
-		InvoiceSummary invoiceSummary = invoiceGenerator.getInvoiceSummary(rides);
-		InvoiceSummary summary = new InvoiceSummary(2, 180);
-		Assertions.assertEquals(summary, invoiceSummary);
+		invoiceGenerator = new InvoiceGenerator();
+		Ride[] rides = { new Ride(25.0, 30), new Ride(12.0, 20) };
+		InvoiceSummary summary = invoiceGenerator.calculateFare(rides);
+		InvoiceSummary expectedInvoiceSummary = new InvoiceSummary(2, 420);
+		Assertions.assertEquals(expectedInvoiceSummary, summary);
+	}
+
+	@Test
+	public void givenUserId_shouldReturnInvoiceSummary() {
+		invoiceGenerator = new InvoiceGenerator();
+		String userId = "srikanthh994@gmail.com";
+		Ride[] rides = { new Ride(2.0, 5), new Ride(0.1, 1) };
+		invoiceGenerator.addRides(userId, rides);
+		InvoiceSummary summary = invoiceGenerator.calculateFare(rides, "normal");
+		InvoiceSummary invoiceSummary = invoiceGenerator.getInvoiceSummary(userId);
+		Assertions.assertEquals(invoiceSummary, summary);
+
 	}
 }
