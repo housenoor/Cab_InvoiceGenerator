@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 
 public class InvoiceServiceTest {
-	// testCase to write Total fare
+
 	@Test
 	public void givenDistanceAndTime_ShouldReturnTotalFare() {
 		InvoiceGenerator invoiceGenerator = new InvoiceGenerator();
@@ -14,7 +14,6 @@ public class InvoiceServiceTest {
 		Assertions.assertEquals(25, fare, 0.0);
 	}
 
-	// testCase to calculate the Minimum Charges
 	@Test
 	public void givenLessDistanceAndTime_ShouldReturnMinFare() {
 		InvoiceGenerator invoiceGenerator = new InvoiceGenerator();
@@ -23,5 +22,13 @@ public class InvoiceServiceTest {
 		double fare = invoiceGenerator.calculateFare(distance, time);
 		Assertions.assertEquals(5, fare, 0.0);
 
+	}
+
+	@Test
+	public void givenMultipleRides_ShouldReturnTotalFare() {
+		InvoiceGenerator invoiceGenerator = new InvoiceGenerator();
+		Ride[] rides = { new Ride(2.0, 5), new Ride(0.1, 1) };
+		double fare = invoiceGenerator.calculateFare(rides);
+		Assertions.assertEquals(30, fare, 0.0);
 	}
 }
